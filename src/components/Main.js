@@ -4,7 +4,7 @@ import api from '../utils/Api';
 import Card from './Card';
 
 const Main = ({
-    onEditProfile, onAddPlace, onEditAvatar, onCardClick
+    onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDeleteCard
 }) => {
 
     const [useName, setUseName] = React.useState('');
@@ -49,7 +49,7 @@ const Main = ({
                     <h1 className="profile__title">
                         {useName}
                     </h1>
-                    <button  type="button" className="profile__edit-button"></button>
+                    <button onClick={handleEditProfileClick} type="button" className="profile__edit-button"></button>
                     <p className="profile__description">
                         {useDescription}
                     </p>

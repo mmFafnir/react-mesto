@@ -12,6 +12,7 @@ function App() {
     
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
 
     const [selectedCard, setSelectedCard] = React.useState({});
@@ -42,6 +43,7 @@ function App() {
         onEditProfile={setIsEditProfilePopupOpen}
         onAddPlace={setIsAddPlacePopupOpen}
         onEditAvatar={setIsEditAvatarPopupOpen}
+        onDeleteCard={setIsDeletePopupOpen}
     />
     <Footer />
     
@@ -87,7 +89,7 @@ function App() {
         <button type="submit" className="form__submit" >Сохранить</button>
     </PopupWithForm>
     
-    <PopupWithForm closePopup={closeAllPopups} isOpne={isAddPlacePopupOpen} name={'popup-delete'} title={'Вы уверены'}>
+    <PopupWithForm closePopup={closeAllPopups} isOpne={isDeletePopupOpen} name={'popup-delete'} title={'Вы уверены'}>
         <button type="submit" className="popup-delete__submit form__submit">Да</button>
     </PopupWithForm>
     
