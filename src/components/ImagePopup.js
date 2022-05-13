@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PopupImage = ({card, onClose}) => {
+const ImagePopup = ({card, onClose}) => {
     
     const handleClose = (e) => {
         const target = e.target;
@@ -20,4 +20,4 @@ const PopupImage = ({card, onClose}) => {
     );
 };
 
-export default PopupImage;
+export default ImagePopup;

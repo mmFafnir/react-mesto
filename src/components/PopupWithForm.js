@@ -22,6 +22,7 @@ const PopupWithForm = ({
                         {title}
                     </h2>
                     {children}
+                    <button type="submit" className="form__submit" >Создать</button>
                 </form>
             </div>
         </div>
