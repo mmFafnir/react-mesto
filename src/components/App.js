@@ -17,31 +17,30 @@ export const path = {
     REGISTER: '/sign-up'
 }
 function App() {
-    const [auth, setAuth] = useState(null);    
+    const [auth, setAuth] = useState(null);
+        
     const [tooltipStatus, setTooltipStatus] = useState(false);
     const [openTooltip, setOpenTooltip] = useState(false);
 
     const navigate = useNavigate()
     
     const logOut = () => {
+        localStorage.clear()
         setAuth(null)
         navigate(path.LOGIN);
     }
     
-
     useEffect(() => {
         if(auth) {
             localStorage.setItem('jwt', auth);
-            setTooltipStatus(true)
-        } else {
-            setTooltipStatus(false)
-        }
-        setOpenTooltip(true)
-
+        } 
+        
+        console.log(auth)
     }, [auth]);
 
     useEffect(() => {
-        if(localStorage.getItem('jwt')){
+        console.log(localStorage.getItem('jwt') )
+        if(localStorage.getItem('jwt') ){
             const JWT = localStorage.getItem('jwt');
             setAuth(JWT)
             navigate('/')
@@ -52,7 +51,7 @@ function App() {
         <>
             <Header logOut={logOut} auth={auth} />
             <Routes >
-                <Route path={path.REGISTER} element={<Register setAuth={setAuth} />} />
+                <Route path={path.REGISTER} element={<Register setOpenTooltip={setOpenTooltip} setTooltipStatus={setTooltipStatus} setAuth={setAuth} />} />
                 <Route path={path.LOGIN} element={<Login setAuth={setAuth}/>} />
                 <Route 
                     exact 

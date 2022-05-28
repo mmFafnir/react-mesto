@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import authApi from '../utils/AuthApi';
 import { useNavigate } from 'react-router-dom'; 
+import { path } from './App';
 
 const Register  = ({
-    setAuth
+    setAuth, setOpenTooltip,
+    setTooltipStatus,
 }) => {
 
     const navigate = useNavigate()
@@ -13,16 +15,16 @@ const Register  = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email, password)
         authApi.register(email, password).then((data) => {
-            console.log(data)
             if(!data.status){
-                setAuth(data.data);
-                navigate('/sign-in')
+                setTooltipStatus(true)
+                navigate(path.LOGIN)                
+                setOpenTooltip(true)
             }
-            
-        }).catch((e) => console.log(e))
-
+        }).catch((e) => {
+            setTooltipStatus(false);
+            setOpenTooltip(true)
+        })
     } 
     return (
         <div className='auth'>
