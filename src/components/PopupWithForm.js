@@ -1,7 +1,7 @@
 import React, { Children } from 'react';
 
 const PopupWithForm = ({
-    title, name, children, isOpne, closePopup
+    title, name, children, isOpen, closePopup, onSubmit
 }) => {
     const handleClosPopup = (e) => {
         const target = e.target;
@@ -10,19 +10,19 @@ const PopupWithForm = ({
         }
     }
     return (
-        <div onClick={(e) => handleClosPopup(e)} className={`popup ${name} ${ isOpne ? 'popup_opened' : ''}`} id={name}>
+        <div onClick={(e) => handleClosPopup(e)} className={`popup ${name} ${ isOpen ? 'popup_opened' : ''}`} id={name}>
             <div className="popup__container">
                 <button
                     type="button" 
                     className="popup__close"
                     id={`${name}-close`}
                     ></button>
-                <form action="/" className="form form-one " name={name} id={`${name}-form`} noValidate> 
+                <form action="/" onSubmit={(e) => onSubmit(e)} className="form form-one " name={name} id={`${name}-form`}> 
                     <h2 className="form__title">
                         {title}
                     </h2>
                     {children}
-                    <button type="submit" className="form__submit" >Создать</button>
+                    <button type="submit" className="form__submit">Создать</button>
                 </form>
             </div>
         </div>

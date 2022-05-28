@@ -1,91 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Login from './Login';
+import Header from './Header';
+import Content from './Content';
+import Register from './Register';
 
-import Header from "./Header";
-import Main from "./Main";
-import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
-
-import ImagePopup from "./ImagePopup";
+import { Routes, Route,useNavigate } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
+import authApi from '../utils/AuthApi';
+import InfoTooltip from './InfoTooltip';
 
 
 
-
+export const path = {
+    MAIN: '/',
+    LOGIN: '/sign-in',
+    REGISTER: '/sign-up'
+}
 function App() {
+    const [auth, setAuth] = useState(null);    
+    const [tooltipStatus, setTooltipStatus] = useState(false);
+    const [openTooltip, setOpenTooltip] = useState(false);
+
+    const navigate = useNavigate()
     
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-    const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-
-    const [selectedCard, setSelectedCard] = React.useState({});
-
-
-
-    const closeAllPopups = () => {
-        setIsEditProfilePopupOpen(false);
-        setIsAddPlacePopupOpen(false);
-        setIsEditAvatarPopupOpen(false);
-        setSelectedCard({
-            open: false,
-            title: '',
-            img: ''
-        })
+    const logOut = () => {
+        setAuth(null)
+        navigate(path.LOGIN);
     }
-
-    const handleCardClick = (card) => {
-        setSelectedCard(card)
-
-    }    
-
-  return (
-    <div>
-    <Header />
-    <Main 
-        onCardClick={handleCardClick}
-        onEditProfile={setIsEditProfilePopupOpen}
-        onAddPlace={setIsAddPlacePopupOpen}
-        onEditAvatar={setIsEditAvatarPopupOpen}
-        onDeleteCard={setIsDeletePopupOpen}
-    />
-    <Footer />
     
-    <PopupWithForm closePopup={closeAllPopups} isOpne={isEditProfilePopupOpen} title={'Редактировать профиль'} name={'description'} >
-        <label className="form__field">
-            <input type="text" className="form__input" placeholder="Ваше имя?"  name="Title" id="input-name" required minLength="2" maxLength="40"/>
-            <span className="input-name-error form__input-error"></span>
-        </label>
-        <label className="form__field">
-            <input type="text" className="form__input" placeholder="Чем занимаетесь?"  name="Business" id="input-business" required minLength="2" maxLength="200"/>
-            <span className="input-business-error form__input-error"></span>
-        </label>
-    </PopupWithForm>
 
-    <PopupWithForm closePopup={closeAllPopups} isOpne={isAddPlacePopupOpen} title={'Новое место'} name={'cards'} >
-        <label className="form__field">
-                    <input type="text" className="form__input" placeholder="Название" name="name" id="input-card" minLength="2" maxLength="30" required/>
-                    <span className="input-card-error form__input-error"></span>
-                </label>
-                <label className="form__field">
-                    <input type="url" className="form__input" placeholder="Ссылка на картинку" name="link" id="input-image"  required/>
-                    <span className="input-image-error form__input-error"></span>
-        </label>
-        
-    </PopupWithForm>
+    useEffect(() => {
+        if(auth) {
+            localStorage.setItem('jwt', auth);
+            setTooltipStatus(true)
+        } else {
+            setTooltipStatus(false)
+        }
+        setOpenTooltip(true)
 
+    }, [auth]);
 
-    <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
-    
-    <PopupWithForm closePopup={closeAllPopups} isOpne={isEditAvatarPopupOpen} title={'Обновить аватар'} name={'popup-avatar'} >
-        <label className="form__field">
-            <input type="url" className="form__input" placeholder="Ссылка на аватарку" name="link" id="input-avatar"  required/>
-            <span className="input-avatar-error form__input-error"></span>
-        </label>
-    </PopupWithForm>
-    
-    <PopupWithForm closePopup={closeAllPopups} isOpne={isDeletePopupOpen} name={'popup-delete'} title={'Вы уверены'}>   </PopupWithForm>
-    
-    </div>
-  );
+    useEffect(() => {
+        if(localStorage.getItem('jwt')){
+            const JWT = localStorage.getItem('jwt');
+            setAuth(JWT)
+            navigate('/')
+        }
+    }, [])
+
+    return (
+        <>
+            <Header logOut={logOut} auth={auth} />
+            <Routes >
+                <Route path={path.REGISTER} element={<Register setAuth={setAuth} />} />
+                <Route path={path.LOGIN} element={<Login setAuth={setAuth}/>} />
+                <Route 
+                    exact 
+                    path={path.MAIN} 
+                    element={
+                        <ProtectedRoute status={auth} components={<Content />}/>
+                    }>
+                    <Route exact path={path.MAIN} element={<Content />}/>
+                </Route>
+            </Routes>
+            <InfoTooltip setOpen={setOpenTooltip} isOpen={openTooltip} status={tooltipStatus} />
+        </>
+    )
 }
 
 export default App;

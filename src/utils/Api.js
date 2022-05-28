@@ -1,5 +1,5 @@
 
-class Api {
+export class Api {
 
     constructor(options) {
 
@@ -20,24 +20,23 @@ class Api {
        return this._DELETE(`cards/${id}`)
     }
 
-    addCardLike(id, body){
-       return this._PUT(`cards/${id}/likes`, body)
+    changeLikeCardStatus(id, status, user){
+        if(status) {
+            return this._PUT(`cards/${id}/likes`, user)     
+        } else {
+            return this._DELETE(`cards/${id}/likes`)    
+        }
     }
 
-    removeCardLike(id){
-        return this._DELETE(`cards/${id}/likes`)
-
-    }
-
-    getUserData() {
+    getUserInfo() {
         return this._getInitial('users/me')
     }
 
-    updateUserInfo(body) {
+    setUserInfo(body) {
         return this._PATCH(body, `users/me`)
     }
 
-    updateAvatar(body){
+    setAvatar(body){
         return this._PATCH(body, `users/me/avatar`)
     }
 
@@ -114,4 +113,5 @@ const api = new Api({
         'Content-Type': 'application/json'
     }
 });
+
 export default api;
