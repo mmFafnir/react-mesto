@@ -24,7 +24,7 @@ const Header = ({
         if(window.location.pathname === path.REGISTER){
             return <Link className='header__link' to={path.LOGIN}>Войти</Link>
         } 
-        if(window.location.pathname === path.LOGIN){
+        if(window.location.pathname === path.LOGIN || !(window.location.pathname === path.REGISTER && window.location.pathname === path.MAIN)){
             return <Link className='header__link' to={path.REGISTER}>Регистрация</Link>
         }
     }

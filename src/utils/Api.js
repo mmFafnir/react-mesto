@@ -100,7 +100,7 @@ export class Api {
         if(res.ok){
             return res.json()
         }
-        return { data: Promise.reject(`Ошибка: ${res.status}`), status: false}
+        return Promise.reject(`Ошибка: ${res.status}`)
     }
 }
 

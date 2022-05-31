@@ -10,12 +10,12 @@ import authApi from '../utils/AuthApi';
 import InfoTooltip from './InfoTooltip';
 
 
-
 export const path = {
     MAIN: '/',
     LOGIN: '/sign-in',
     REGISTER: '/sign-up'
 }
+
 function App() {
     const [auth, setAuth] = useState(null);
         
@@ -34,12 +34,10 @@ function App() {
         if(auth) {
             localStorage.setItem('jwt', auth);
         } 
-        
-        console.log(auth)
     }, [auth]);
 
     useEffect(() => {
-        console.log(localStorage.getItem('jwt') )
+        console.log(localStorage.getItem('jwt'))
         if(localStorage.getItem('jwt') ){
             const JWT = localStorage.getItem('jwt');
             setAuth(JWT)
@@ -52,15 +50,16 @@ function App() {
             <Header logOut={logOut} auth={auth} />
             <Routes >
                 <Route path={path.REGISTER} element={<Register setOpenTooltip={setOpenTooltip} setTooltipStatus={setTooltipStatus} setAuth={setAuth} />} />
-                <Route path={path.LOGIN} element={<Login setAuth={setAuth}/>} />
+                <Route path={path.LOGIN} element={<Login setOpenTooltip={setOpenTooltip} setTooltipStatus={setTooltipStatus} setAuth={setAuth}/>} />
                 <Route 
                     exact 
                     path={path.MAIN} 
                     element={
-                        <ProtectedRoute status={auth} components={<Content />}/>
+                        <ProtectedRoute status={auth} components={<Content auth={auth} />}/>
                     }>
-                    <Route exact path={path.MAIN} element={<Content />}/>
+                    <Route exact path={path.MAIN} element={<Content auth={auth} />}/>
                 </Route>
+                <Route path="*" element={<Login setAuth={setAuth}/>} />
             </Routes>
             <InfoTooltip setOpen={setOpenTooltip} isOpen={openTooltip} status={tooltipStatus} />
         </>

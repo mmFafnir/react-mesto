@@ -15,7 +15,9 @@ import AddPlacePopup from './AddPlacePopup';
 
 
 
-function Content() {
+function Content({
+    auth
+}) {
     
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
@@ -30,8 +32,7 @@ function Content() {
     const handleCardLike = (card) => {
         // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some(i => i._id === currentUser._id);
-        // console.log(card)
-        
+
         // Отправляем запрос в API и получаем обновлённые данные карточки
         api.changeLikeCardStatus(card._id, !isLiked, currentUser).then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
@@ -84,13 +85,15 @@ function Content() {
     }
 
     useEffect(() => {
-
-        Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([user, cards]) => {
-            setCurrentUser(user)
-            setCards(cards)
-        }).catch((e) => console.log(e))
-
+        if(auth){
+            Promise.all([api.getUserInfo(), api.getInitialCards()])
+            .then(([user, cards]) => {
+                setCurrentUser(user)
+                setCards(cards)
+            }).catch((e) => console.log(e))
+            
+            console.log('asd')
+        }
     }, [])
     
   return (

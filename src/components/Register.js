@@ -16,16 +16,15 @@ const Register  = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         authApi.register(email, password).then((data) => {
-            if(!data.status){
-                setTooltipStatus(true)
-                navigate(path.LOGIN)                
-                setOpenTooltip(true)
-            }
+            setTooltipStatus(true)
+            navigate(path.LOGIN)                
+            setOpenTooltip(true)
         }).catch((e) => {
             setTooltipStatus(false);
             setOpenTooltip(true)
         })
     } 
+    
     return (
         <div className='auth'>
             <h2 className='auth__title'>Регистрация</h2>

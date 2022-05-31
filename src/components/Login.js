@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import authApi from '../utils/AuthApi';
 import { useNavigate } from 'react-router-dom'; 
+import InfoTooltip from './InfoTooltip';
 
 
 const Login = ({
-    setAuth
+    setAuth, setOpenTooltip, setTooltipStatus
 }) => {
 
     const navigate = useNavigate()
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState('');
-    
-    
-
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        authApi.login(email, password).then(data => {
-            if(!data.status){
+        authApi.login(email, password)
+        .then(data => {
                 setAuth(data.token)
                 navigate('/')
-            }
-            console.log(data)
-        }).catch((e) => console.log(e))
+        })
+        .catch((e) => {        
+                setTooltipStatus(false);
+                setOpenTooltip(true)
+        })
 
     }
-
 
     return (
         <div className='auth'>
@@ -43,8 +41,7 @@ const Login = ({
                 </div>
                 <button 
                     className='auth__submit'
-                    
-                >Зарегистрироваться</button>
+                >Войти</button>
             </form>        
         </div>
     );
